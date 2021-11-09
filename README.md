@@ -15,52 +15,52 @@ Slots have tiers - the higher the tier, the more digital real estate there is in
 `mint` lets the caller mint a specific NFT id so that they may pick the tier and positioning of their NFT. In addition, they may specify whether it is for sale, and its sale price. Lastly, they may also store a data hash of the information of the slot. The actual information is stored off chain to save space on information stored on chain, but the data hash can be used to verify the integrity of the data stored off chain. Example information includes the image URL, social media handles, or descriptions.
 
 ### `update-slot`
-`update-slot` only allows the owner of the NFT to update information about their slot, such as whether it's for sale, its sale price, and an updated data-hash.
+only allows the owner of the NFT to update information about their slot, such as whether it's for sale, its sale price, and an updated data-hash.
 
 ### `transfer`
-`transfer` is part of SIP9 and transfers the NFT from the sender to a new principal
+part of SIP9 and transfers the NFT from the sender to a new principal
 
 ### `purchase`
-`purchase` allows the caller to buy a specified NFT if it is for sale. It will pay the owner and any royalties, then reset the approved address. 
+allows the caller to buy a specified NFT if it is for sale. It will pay the owner and any royalties, then reset the approved address. 
 
 ### `purchase-and-update-slot`
-`purchase-and-update-slot` will be used when someone buys a slot, and also wishes to update the information on the slot. This will most likely be used over just `purchase`. 
+will be used when someone buys a slot, and also wishes to update the information on the slot. This will most likely be used over just `purchase`. 
 
 ### `set-royalty`
-`set-royalty` allows the contract owner to change the royalty percentage varable.
+allows the contract owner to change the royalty percentage varable.
 
 ### `set-approval-for`
-`set-approval-for` is a part of the approvable trait. Only the owner of an NFT is able to give approval to one other address to transfer the NFT on their behalf.
+is a part of the approvable trait. Only the owner of an NFT is able to give approval to one other address to transfer the NFT on their behalf.
 
 ### `burn`
-`burn` allows the owner of the NFT to burn it.
+allows the owner of the NFT to burn it.
 
 ### `set-token-uri` 
-`set-token-uri` allows the contract owner to update the token uri only if the metadata hasn't been frozen yet
+allows the contract owner to update the token uri only if the metadata hasn't been frozen yet
 
 ### `freeze-metadata`
-`freeze-metadata` allows the contract owner to freeze metadata so that `set-token-uri` cannot be used to change the token uri
+allows the contract owner to freeze metadata so that `set-token-uri` cannot be used to change the token uri
 
 
 ### Read Only Methods
 
 ### `get-last-token-id`
-`get-last-token-id` is a SIP9 function that lets you get the last token ID.
+is a SIP9 function that lets you get the last token ID.
 
 ### `get-token-uri`
-`get-token-uri` is a SIP9 function that lets you get the uri for the metadata
+is a SIP9 function that lets you get the uri for the metadata
 
 ### `get-owner`
-`get-owner` is a SIP9 function that lets you get the owner of an NFT
+is a SIP9 function that lets you get the owner of an NFT
 
 ### `get-approval`
-`get-approval` is an approvable trait function that lets you get the address that has permission to transfer this NFT. By default, it will be the owner's address.
+is an approvable trait function that lets you get the address that has permission to transfer this NFT. By default, it will be the owner's address.
 
 ### `get-slot-info`
-`get-slot-info` lets you get information about an NFT, such as whether it's for sale, its sale price, and its data hash
+lets you get information about an NFT, such as whether it's for sale, its sale price, and its data hash
 
 #### `get-royalty`
-`get-royalty` lets you get the royalty percentage specified in the contract
+lets you get the royalty percentage specified in the contract
 
 
 ## Testing
