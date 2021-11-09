@@ -1,0 +1,15 @@
+[project]
+name = "clarity"
+requirements = ["nft-trait.clar"]
+
+[contracts.nft-trait]
+path = "contracts/nft-trait.clar"
+depends_on = []
+
+[contracts.nft-approvable-trait]
+path = "contracts/nft-approvable-trait.clar"
+depends_on = []
+
+[contracts.stacks-board-slot]
+path = "contracts/stacks-board-slot.clar"
+depends_on = ["nft-trait"]
