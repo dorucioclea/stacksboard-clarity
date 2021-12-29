@@ -4,7 +4,7 @@ import {
   Chain,
   Account,
   types,
-} from "https://deno.land/x/clarinet@v0.18.0/index.ts";
+} from "https://deno.land/x/clarinet@v0.20.0/index.ts";
 import { assertEquals } from "https://deno.land/std@0.90.0/testing/asserts.ts";
 import hash from "https://deno.land/x/object_hash@2.0.3.1/mod.ts";
 import { Client } from "../src/client.ts";
@@ -19,103 +19,6 @@ import {
   EXAMPLE_DATA_2,
 } from "../src/constants.ts";
 import { formatBuffString } from "../src/utils.ts";
-
-// not implemented in clarinet yet
-declare global {
-  interface Array<T> {
-    // Absence of test vectors at the moment - token field could present some challenges.
-    expectNonFungibleTokenTransferEvent(
-      token: String,
-      sender: String,
-      recipient: String,
-      assetId: String
-    ): Object;
-    expectNonFungibleTokenMintEvent(
-      token: String,
-      recipient: String,
-      assetId: String
-    ): Object;
-    expectNonFungibleTokenBurnEvent(
-      token: String,
-      sender: String,
-      assetId: String
-    ): Object;
-    expectEvent(sel: (e: Object) => Object): Object;
-  }
-}
-
-Array.prototype.expectNonFungibleTokenTransferEvent = function (
-  token: String,
-  sender: String,
-  recipient: String,
-  assetId: String
-) {
-  for (let event of this) {
-    try {
-      let e: any = {};
-      e["value"] = event.nft_transfer_event.value.expectUint(token);
-      e["sender"] = event.nft_transfer_event.sender.expectPrincipal(sender);
-      e["recipient"] =
-        event.nft_transfer_event.recipient.expectPrincipal(recipient);
-      if (event.nft_transfer_event.asset_identifier.endsWith(assetId)) {
-        e["asset_identifier"] = event.nft_transfer_event.asset_identifier;
-      } else {
-        continue;
-      }
-      return e;
-    } catch (error) {
-      continue;
-    }
-  }
-  throw new Error(`Unable to retrieve expected NonFungibleTokenTransferEvent`);
-};
-
-Array.prototype.expectNonFungibleTokenMintEvent = function (
-  token: String,
-  recipient: String,
-  assetId: String
-) {
-  for (let event of this) {
-    try {
-      let e: any = {};
-      e["value"] = event.nft_mint_event.value.expectUint(token);
-      e["recipient"] =
-        event.nft_mint_event.recipient.expectPrincipal(recipient);
-      if (event.nft_mint_event.asset_identifier.endsWith(assetId)) {
-        e["asset_identifier"] = event.nft_mint_event.asset_identifier;
-      } else {
-        continue;
-      }
-      return e;
-    } catch (error) {
-      continue;
-    }
-  }
-  throw new Error(`Unable to retrieve expected NonFungibleTokenMintEvent`);
-};
-
-Array.prototype.expectNonFungibleTokenBurnEvent = function (
-  token: String,
-  sender: String,
-  assetId: String
-) {
-  for (let event of this) {
-    try {
-      let e: any = {};
-      e["value"] = event.nft_burn_event.value.expectUint(token);
-      e["sender"] = event.nft_burn_event.sender.expectPrincipal(sender);
-      if (event.nft_burn_event.asset_identifier.endsWith(assetId)) {
-        e["assetId"] = event.nft_burn_event.asset_identifier;
-      } else {
-        continue;
-      }
-      return e;
-    } catch (error) {
-      continue;
-    }
-  }
-  throw new Error(`Unable to retrieve expected NonFungibleTokenBurnEvent`);
-};
 
 const getWalletsAndClient = (chain: Chain, accounts: Map<string, Account>) => {
   const deployer = accounts.get("deployer")!;
@@ -150,15 +53,16 @@ Clarinet.test({
     assertEquals(block.receipts[0].events.length, 2);
 
     block.receipts[0].events.expectSTXTransferEvent(
-      700000000,
+      600000000,
       wallet_1.address,
       deployer.address
     );
 
     block.receipts[0].events.expectNonFungibleTokenMintEvent(
-      "0",
+      types.uint(0),
       wallet_1.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
 
     // check that slots counter updated
@@ -199,6 +103,23 @@ Clarinet.test({
     ]);
     block.receipts[0].result.expectErr().expectUint(ErrCode.ERR_ALREADY_MINTED);
     assertEquals(block.receipts[0].events.length, 0);
+
+    client.getLastTokenId().result.expectOk().expectUint(1);
+
+    const emptyWallet = accounts.get("wallet_9");
+    block = chain.mineBlock([
+      client.mint(
+        1,
+        EXAMPLE_FOR_SALE,
+        EXAMPLE_PRICE,
+        formatBuffString(hash(EXAMPLE_DATA)),
+        emptyWallet!
+      ),
+    ]);
+    block.receipts[0].result.expectErr().expectUint(1);
+
+    // make sure that slot counter didn't change
+    client.getLastTokenId().result.expectOk().expectUint(1);
   },
 });
 
@@ -311,10 +232,11 @@ Clarinet.test({
       client.transfer(0, wallet_1.address, wallet_2.address, wallet_1),
     ]);
     block.receipts[0].events.expectNonFungibleTokenTransferEvent(
-      "0",
+      types.uint(0),
       wallet_1.address,
       wallet_2.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
 
     // check that owner is now wallet_2
@@ -336,10 +258,11 @@ Clarinet.test({
     ]);
 
     block.receipts[0].events.expectNonFungibleTokenTransferEvent(
-      "0",
+      types.uint(0),
       wallet_2.address,
       wallet_1.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
 
     // check that owner is now wallet_1 again
@@ -407,10 +330,11 @@ Clarinet.test({
     ]);
     block.receipts[0].result.expectOk().expectBool(true);
     block.receipts[0].events.expectNonFungibleTokenTransferEvent(
-      "0",
+      types.uint(0),
       wallet_1.address,
       wallet_2.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
 
     // check that owner is now wallet_2
@@ -472,10 +396,11 @@ Clarinet.test({
     );
 
     block.receipts[0].events.expectNonFungibleTokenTransferEvent(
-      "0",
+      types.uint(0),
       wallet_1.address,
       wallet_2.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
 
     // change royalty fee
@@ -505,10 +430,11 @@ Clarinet.test({
     );
 
     block.receipts[0].events.expectNonFungibleTokenTransferEvent(
-      "0",
+      types.uint(0),
       wallet_2.address,
       wallet_3.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
   },
 });
@@ -557,10 +483,11 @@ Clarinet.test({
     );
 
     block.receipts[0].events.expectNonFungibleTokenTransferEvent(
-      "0",
+      types.uint(0),
       wallet_1.address,
       wallet_2.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
     // check that slots map updated
     let actualSlotResult: any = client
@@ -651,17 +578,17 @@ Clarinet.test({
       .getTokenUri(0)
       .result.expectOk()
       .expectSome()
-      .expectAscii("https://www.stacks.co/");
+      .expectAscii("https://www.stacksboard.art/metadata/");
 
     // wallet 1 cant change token uri since not contract owner
     let block = chain.mineBlock([
-      client.setTokenUri("ipfs://www.stacks.co/", wallet_1),
+      client.setTokenUri("ipfs://www.stacksboard.art/metadata/", wallet_1),
     ]);
     block.receipts[0].result.expectErr().expectUint(ErrCode.ERR_NOT_AUTHORIZED);
 
     // deployer can
     block = chain.mineBlock([
-      client.setTokenUri("ipfs://www.stacks.co/", deployer),
+      client.setTokenUri("ipfs://www.stacksboard.art/metadata/", deployer),
     ]);
     block.receipts[0].result.expectOk().expectBool(true);
 
@@ -669,7 +596,7 @@ Clarinet.test({
       .getTokenUri(0)
       .result.expectOk()
       .expectSome()
-      .expectAscii("ipfs://www.stacks.co/");
+      .expectAscii("ipfs://www.stacksboard.art/metadata/");
 
     // wallet 1 cant freeze since not contract owner
     block = chain.mineBlock([client.freezeMetadata(wallet_1)]);
@@ -691,7 +618,7 @@ Clarinet.test({
       .getTokenUri(0)
       .result.expectOk()
       .expectSome()
-      .expectAscii("ipfs://www.stacks.co/");
+      .expectAscii("ipfs://www.stacksboard.art/metadata/");
   },
 });
 
@@ -717,9 +644,10 @@ Clarinet.test({
     block = chain.mineBlock([client.burn(0, wallet_1)]);
     block.receipts[0].result.expectOk().expectBool(true);
     block.receipts[0].events.expectNonFungibleTokenBurnEvent(
-      "0",
+      types.uint(0),
       wallet_1.address,
-      `${deployer.address}.stacks-board-slot::stacks-board-slot`
+      `${deployer.address}.stacks-board-slot`,
+      `stacks-board-slot`
     );
 
     const actualSlotResult = client

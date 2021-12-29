@@ -1,5 +1,12 @@
 (impl-trait .nft-trait.nft-trait)
 (impl-trait .nft-approvable-trait.nft-approvable-trait)
+;; testnet
+;; (impl-trait 'STGAKH27HF1T170QET72C727873H911BKQKQ36KQ.nft-trait.nft-trait)
+;; (impl-trait 'STGAKH27HF1T170QET72C727873H911BKQKQ36KQ.nft-approvable-trait.nft-approvable-trait)
+;; mainnet
+;; (impl-trait 'SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait.nft-trait)
+;; (impl-trait 'SPGAKH27HF1T170QET72C727873H911BKNMPF8YB.nft-approvable-trait.nft-approvable-trait)
+
 
 (define-non-fungible-token stacks-board-slot uint)
 
@@ -14,17 +21,15 @@
 (define-constant ERR-FAILED-SET-APPROVAL-FOR u107)
 (define-constant ERR-METADATA-FROZEN u108)
 
-(define-constant CONTRACT-OWNER tx-sender)
+(define-constant CONTRACT-OWNER contract-caller)
 (define-constant MAX-SUPPLY u353) 
-;; map id to its tier.
-(define-constant ID-TO-TIER (list u8 u8 u8 u8 u8 u8 u8 u8 u8 u8 u8 u8 u7 u7 u7 u7 u5 u5 u5 u5 u5 u5 u5 u5 u5 u4 u4 u4 u4 u4 u4 u4 u4 u4 u4 u4 u4 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u3 u4 u4 u4 u4 u4 u4 u4 u4 u4 u4 u4 u4 u6 u6 u6 u6 u6 u6 u6 u6 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 ))
-;; the higher the tier, the more digital real estate it has, so the higher the mint price
-(define-constant TIER-TO-MINT-COST (list u50 u98 u190 u270 u640 u600 u630 u1080 u700)) ;; in STX
+(define-constant ID-TO-TIER (list u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u5 u5 u5 u5 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u4 u4 u4 u4 u4 u4 u4 u4 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u6 u3 u3 u3 u3 u3 u3 u3 u3 u3 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u2 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u1 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0 u0))
+(define-constant TIER-TO-MINT-COST (list u50 u190 u270 u600 u675 u1080 u600)) ;; in STX
 (define-constant uSTX-TO-STX u1000000)
 
 ;; variables 
 (define-data-var slot-counter uint u0)
-(define-data-var token-uri (string-ascii 256) "https://www.stacks.co/")
+(define-data-var token-uri (string-ascii 256) "https://www.stacksboard.art/metadata/")
 (define-data-var royalty-percentage uint u500)
 (define-data-var metadata-frozen bool false)
 
@@ -58,23 +63,23 @@
         
         ;; assert we didn't already mint the slot at this tier and index
         (asserts! (is-eq none (get-slot-info id)) (err ERR-ALREADY-MINTED))
-
-        (match (stx-transfer? cost-per-mint tx-sender CONTRACT-OWNER)
-            success (begin
-                (try! (nft-mint? stacks-board-slot id tx-sender))
-                (var-set slot-counter (+ u1 count))
-                (map-set slots-map id {for-sale: for-sale, price: price, minted: true, data-hash: data-hash, approval: tx-sender})
-                (ok id)
-            )
-            error (err error)
+        
+        (if (is-eq contract-caller CONTRACT-OWNER)
+            true
+            (try! (stx-transfer? cost-per-mint contract-caller CONTRACT-OWNER))
         )
+
+        (try! (nft-mint? stacks-board-slot id contract-caller))
+        (var-set slot-counter (+ u1 count))
+        (map-set slots-map id {for-sale: for-sale, price: price, minted: true, data-hash: data-hash, approval: contract-caller})
+        (ok id)
     )
 )
 
 ;; SIP-009
 (define-public (transfer (id uint) (owner principal) (recipient principal))
     (begin
-        (asserts! (and (is-owner-or-approval id owner) (is-owner-or-approval id tx-sender)) (err ERR-NOT-AUTHORIZED))
+        (asserts! (and (is-owner-or-approval id owner) (is-owner-or-approval id contract-caller)) (err ERR-NOT-AUTHORIZED))
         (try! (internal-set-approval-for id recipient)) ;; when transfering to new owner, reset approval to next owner (recipient)
         (nft-transfer? stacks-board-slot id owner recipient)
     )
@@ -90,8 +95,8 @@
         (slot-info (unwrap! (get-slot-info id) (err ERR-UNKNOWN-ID)))
         )
 
-        ;; asserts the owner is the tx-sender
-        (asserts! (is-owner id tx-sender) (err ERR-NOT-AUTHORIZED))
+        ;; asserts the owner is the contract-caller
+        (asserts! (is-owner id contract-caller) (err ERR-NOT-AUTHORIZED))
         (ok (map-set slots-map 
             id
             (merge slot-info 
@@ -112,7 +117,7 @@
         (is-for-sale (get for-sale slot-info))
         (price (get price slot-info))
         (owner (unwrap! (unwrap! (get-owner id) (err ERR-UNKNOWN-OWNER)) (err ERR-UNKNOWN-OWNER)))
-        (buyer tx-sender)
+        (buyer contract-caller)
         )
         (asserts! is-for-sale (err ERR-NOT-FOR-SALE))
         (try! (pay-owner buyer price owner)) 
@@ -138,7 +143,7 @@
 
 (define-public (set-royalty (percentage uint))
     (begin
-        (asserts! (is-eq tx-sender CONTRACT-OWNER) (err ERR-NOT-AUTHORIZED))
+        (asserts! (is-eq contract-caller CONTRACT-OWNER) (err ERR-NOT-AUTHORIZED))
         (ok (var-set royalty-percentage percentage))
     )
 )
@@ -146,40 +151,22 @@
 ;; approvable trait
 (define-public (set-approval-for (id uint) (approval principal))
     (begin 
-        (asserts! (is-owner id tx-sender) (err ERR-NOT-AUTHORIZED))
+        (asserts! (is-owner id contract-caller) (err ERR-NOT-AUTHORIZED))
         (internal-set-approval-for id approval)
     )
 )
 
 (define-public (burn (id uint))
     (begin
-        (asserts! (is-owner id tx-sender) (err ERR-NOT-AUTHORIZED))
+        (asserts! (is-owner id contract-caller) (err ERR-NOT-AUTHORIZED))
         (map-set slots-map id {for-sale: false, price: u0, minted: true, data-hash: 0x00000000000000000000000000000000000000000000000000000000000000000000000000000000, approval: 'SP000000000000000000002Q6VF78})
-        (nft-burn? stacks-board-slot id tx-sender)
-    )
-)
-
-;; Set token uri
-(define-public (set-token-uri (new-token-uri (string-ascii 80)))
-    (begin
-        (asserts! (is-eq tx-sender CONTRACT-OWNER) (err ERR-NOT-AUTHORIZED))
-        (asserts! (not (var-get metadata-frozen)) (err ERR-METADATA-FROZEN))
-        (var-set token-uri new-token-uri)
-        (ok true)
-    )
-)
-
-;; Freeze metadata
-(define-public (freeze-metadata)
-    (begin
-        (asserts! (is-eq tx-sender CONTRACT-OWNER) (err ERR-NOT-AUTHORIZED))
-        (var-set metadata-frozen true)
-        (ok true)
+        (nft-burn? stacks-board-slot id contract-caller)
     )
 )
 
 ;; read only functions
 ;; SIP-009
+;; TODO: make sure you fix this in v2, should be slot-counter - 1
 (define-read-only (get-last-token-id)
     (ok (var-get slot-counter)) 
 )
@@ -210,6 +197,26 @@
 (define-read-only (get-royalty)
     (ok (var-get royalty-percentage))
 )
+
+;; Set token uri
+(define-public (set-token-uri (new-token-uri (string-ascii 80)))
+    (begin
+        (asserts! (is-eq contract-caller CONTRACT-OWNER) (err ERR-NOT-AUTHORIZED))
+        (asserts! (not (var-get metadata-frozen)) (err ERR-METADATA-FROZEN))
+        (var-set token-uri new-token-uri)
+        (ok true)
+    )
+)
+
+;; Freeze metadata
+(define-public (freeze-metadata)
+    (begin
+        (asserts! (is-eq contract-caller CONTRACT-OWNER) (err ERR-NOT-AUTHORIZED))
+        (var-set metadata-frozen true)
+        (ok true)
+    )
+)
+
 
 ;; private functions
 
@@ -258,3 +265,28 @@
         )
     )
 )
+
+;; mint slots for winners
+;; (begin 
+;;     ;; alexgo
+;;     (try! (mint u13 false u0 0x37396135346533393235643762356136366138333161316430353531316439653233313434653362))
+;;     ;; citycoins
+;;     (try! (mint u12 false u0 0x63373566613739343439393230663533613533633134643738643130323161616233373536616566))
+;;     ;; megapont
+;;     (try! (mint u0 false u0 0x34353065636532393537376434313333656632393865646238653732613930363032353233636337))
+;;     ;; arkadiko
+;;     (try! (mint u1 false u0 0x37303631363166323731396132396264386436666238343138313638326332653966363834633266))
+;;     ;; moonray
+;;     (try! (mint u2 false u0 0x61396433613861376439393033366666393332373263306264336530633162316365663034633761))
+
+;;     ;; winner #1
+;;     (try! (mint u3 false u0 0x32386534636665326162383836643162393735366664343363353830393062386437396262646366))
+;;     ;; winner #2 
+;;     (try! (mint u57 false u0 0x36366236623565316636663661313432396463333439363366306139343931303131383830343866))
+;;     ;; winner #3 
+;;     (try! (mint u89 false u0 0x32616365303336633233633136306263323762343730656233623063393164323362646334353262))
+;;     ;; winner #4 
+;;     (try! (mint u161 false u0 0x61646630616534636463396331313338346637616438393936323361316636383034353838323639))
+;;     ;; winner #5 
+;;     (try! (mint u162 false u0 0x38366162616230366663633962613765666263383730663861646635336465333265633961323664))
+;; )

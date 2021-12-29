@@ -12,4 +12,36 @@ depends_on = []
 
 [contracts.stacks-board-slot]
 path = "contracts/stacks-board-slot.clar"
-depends_on = ["nft-trait"]
+depends_on = ["nft-trait", "nft-approvable-trait"]
+
+[contracts.crashpunks-board-slot]
+path = "contracts/crashpunks-board-slot.clar"
+depends_on = ["nft-trait", "operable", "commission-trait", "stacks-board-slot"]
+
+[contracts.megapont-ape-club-board-slot]
+path = "contracts/megapont-ape-club-board-slot.clar"
+depends_on = ["nft-trait", "operable", "commission-trait", "stacks-board-slot"]
+
+[contracts.operable]
+path = "contracts/operable.clar"
+depends_on = []
+
+[contracts.commission-trait]
+path = "contracts/commission-trait.clar"
+depends_on = []
+
+[contracts.commission-nop]
+path = "contracts/commission-nop.clar"
+depends_on = []
+
+[contracts.commission-stacksboard]
+path = "contracts/commission-stacksboard.clar"
+depends_on = []
+
+[contracts.commission-collection-board]
+path = "contracts/commission-collection-board.clar"
+depends_on = []
+
+#[contracts.crashpunks-v2]
+#path = "contracts/crashpunks-v2.clar"
+#depends_on = ["nft-trait", "operable", "commission-trait"]

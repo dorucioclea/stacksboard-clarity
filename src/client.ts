@@ -5,7 +5,7 @@ import {
   Account,
   types,
   ReadOnlyFn,
-} from "https://deno.land/x/clarinet@v0.14.0/index.ts";
+} from "https://deno.land/x/clarinet@v0.21.2/index.ts";
 
 export class Client {
   contractName: string = "stacks-board-slot";
